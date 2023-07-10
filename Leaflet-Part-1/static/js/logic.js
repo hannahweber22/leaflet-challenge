@@ -12,12 +12,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Define a markerSize() function that will give each earthquake a different radius based on its magnitude.
 function markerSize(magnitude) {
-    return Math.sqrt(Math.abs(magnitude)) * 100;
+    return magnitude * 10000
   }
 
 // Define a opacityFill() function that will give each earthquake a different fill opacity based on its depth
 function opacityFill(depth) {
-    return Math.sqrt(depth) * 100;
+    return depth / 25;
   }
 
  
@@ -41,7 +41,8 @@ d3.json(url).then(function(response) {
         L.circle([location.coordinates[1], location.coordinates[0]], 
             {
                 color: "green",
-                fillColor: "green",
+                fillColor: "red",
+                weight: opacityFill(location.coordinates[2]),
                 fillOpacity: opacityFill(location.coordinates[2]),
                 radius: markerSize(properties.mag)
               })
@@ -54,6 +55,7 @@ d3.json(url).then(function(response) {
 
     }
 
+    /////////////////// LEGEND ///////////////////////
     // Add legend (don't forget to add the CSS from index.html)
     var legend = L.control({ position: 'bottomright' })
     legend.onAdd = function (map) {
